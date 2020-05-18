@@ -19,3 +19,9 @@ $ python main.py
 ```
 $ python3 main.py
 ```
+
+Web layout:
+![image](https://i.imgur.com/JhEjh4h.png)
+
+Thanks to
+- [Daniel Tsai](https://github.com/daniel0076)
