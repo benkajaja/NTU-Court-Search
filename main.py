@@ -26,7 +26,10 @@ for court in requestvenueId:
     j2 = [x for x in j1 if x['statusDraw'] == 1] # 1: winner 2: loser
     j3 = [x for x in j2 if x['yearUserUnitName'] in requestyearUserUnitName]
     res += j3
-    
+
+for i in res:
+    i['rentDate'] = i['rentDate'][:10]
+
 ## show
 res.sort(key = lambda s: s['rentDate'])
 for i in res:
