@@ -15,7 +15,7 @@ Usage:
 $ python main.py
 ```
 
-* Linux
+* Linux/MacOS
 ```
 $ python3 main.py
 ```
