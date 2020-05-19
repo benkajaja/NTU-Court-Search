@@ -45,17 +45,16 @@ def index(request):
     weekdayS = calendar.monthrange(requestTime.year,requestTime.month)[0]
     days = calendar.monthrange(requestTime.year,requestTime.month)[1]
     weeks = math.ceil((weekdayS+days)/7)
-    print(weekdayS, days, weeks)
+    
     cal = [[{"date":0, "courts":[]} for _ in range(7)] for _ in range(weeks)]
     for i in range(1,days+1):
         cal[(i+weekdayS-1)//7][(i+weekdayS-1)%7] = {"date":i, "courts":[]}
-        print((i+weekdayS-1)//7, (i+weekdayS-1)%7)
 
     ## add court
     for i in res:
         date = int(i['rentDate'][-2:])
         cal[(date+weekdayS-1)//7][(date+weekdayS-1)%7]['courts'].append(i)
     
-    monthList = [i for i in range(1,12)]
+    monthList = [i for i in range(1,13)]
         
     return render(request, 'home/index.html', locals())
