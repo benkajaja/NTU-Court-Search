@@ -1,0 +1,6 @@
+.vscode/*
+# .gitignore
+djangoWeb/db.sqlite3
+djangoWeb/djangoWeb/__pycache__/*
+djangoWeb/home/__pycache__/*
+djangoWeb/home/migrations/__pycache__/*
