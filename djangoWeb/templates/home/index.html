@@ -90,5 +90,19 @@
                 </tbody>
             </table>
         </div>
+        <div>
+            {% if isDrawn %}
+            <div class="ui blue label">已抽</div>
+            {% else %}
+            <div class="ui label">未抽</div>
+            {% endif %}
+            {% for s in requestStatus %}
+                {% if s.requestChk %}
+                <div class="ui green label">{{s.courtID}}</div>
+                {% else %}
+                <div class="ui red label">{{s.courtID}}</div>
+                {% endif %}
+            {% endfor %}
+        </div>
     </body>
 </html>

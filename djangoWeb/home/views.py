@@ -25,7 +25,10 @@ def index(request):
     
     requestDateS =  datetime(requestTime.year,requestTime.month,1).strftime("%Y-%m-%d")
     requestDateE =  datetime(requestTime.year,requestTime.month,calendar.monthrange(requestTime.year, requestTime.month)[1]).strftime("%Y-%m-%d")
+    requestStatus = []
+    monthList = [i for i in range(1,13)]
     res = []
+    isDrawn = True
 
     ## crawler
     for court in requestvenueId:
@@ -35,6 +38,8 @@ def index(request):
         j2 = [x for x in j1 if x['statusDraw'] == 1] # 1: winner 2: loser
         j3 = [x for x in j2 if x['yearUserUnitName'] in requestyearUserUnitName]
         res += j3
+        isDrawn = isDrawn and (not any(jj['statusRent']==2 and jj['statusDraw']==0 for jj in j1)) and j1 != []
+        requestStatus.append({'courtID':int(court)-82, 'requestChk': r.status_code == 200})
     
     for i in res:
         i['rentDate'] = i['rentDate'][:10]
@@ -55,6 +60,4 @@ def index(request):
         date = int(i['rentDate'][-2:])
         cal[(date+weekdayS-1)//7][(date+weekdayS-1)%7]['courts'].append(i)
     
-    monthList = [i for i in range(1,13)]
-        
     return render(request, 'home/index.html', locals())

@@ -4,11 +4,12 @@ import calendar
 
 requestyearUserUnitName = ['資訊工程學系', '資工所', '網媒所']
 requestvenueId = ['86', '87', '88', '89'] # court 4,5,6,7
-requestTime = datetime(2020, 5, 1) # or datetime.now()
+requestTime = datetime(2019, 1, 1) # or datetime.now()
 requestDateS =  datetime(requestTime.year,requestTime.month,1).strftime("%Y-%m-%d")
 requestDateE =  datetime(requestTime.year,requestTime.month,calendar.monthrange(requestTime.year, requestTime.month)[1]).strftime("%Y-%m-%d")
 print("From %s To %s" % (requestDateS, requestDateE))
 res = []
+isDrawn = True
 
 ## crawler
 for court in requestvenueId:
@@ -23,6 +24,7 @@ for court in requestvenueId:
 
     # print(r.status_code)
     j1 = r.json()
+    isDrawn = isDrawn and (not any(jj['statusRent']==2 and jj['statusDraw']==0 for jj in j1)) and r.json() != []
     j2 = [x for x in j1 if x['statusDraw'] == 1] # 1: winner 2: loser
     j3 = [x for x in j2 if x['yearUserUnitName'] in requestyearUserUnitName]
     res += j3
