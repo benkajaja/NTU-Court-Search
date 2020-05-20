@@ -4,7 +4,7 @@ import calendar
 
 requestyearUserUnitName = ['資訊工程學系', '資工所', '網媒所']
 requestvenueId = ['86', '87', '88', '89'] # court 4,5,6,7
-requestTime = datetime(2019, 1, 1) # or datetime.now()
+requestTime = datetime.now() # or datetime(2020, 6, 1)
 requestDateS =  datetime(requestTime.year,requestTime.month,1).strftime("%Y-%m-%d")
 requestDateE =  datetime(requestTime.year,requestTime.month,calendar.monthrange(requestTime.year, requestTime.month)[1]).strftime("%Y-%m-%d")
 print("From %s To %s" % (requestDateS, requestDateE))
