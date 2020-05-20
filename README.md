@@ -2,14 +2,18 @@
 Environment:
 * python 3
 
+Requirement:
+* requests
+* django (for django project)
+
 To do list: (挖坑區)
-* django
-* semantic ui
+* django :white_check_mark:
+* semantic ui :white_check_mark:
 * AWS Lambda
 * Telegram API
 * 有夢最美
 
-Usage:
+Usage(only for crawler):
 * Windows
 ```
 $ python main.py
@@ -18,6 +22,11 @@ $ python main.py
 * Linux/MacOS
 ```
 $ python3 main.py
+```
+
+Run Django Web:
+```
+$ python3 djangoWeb/manage.py runserver
 ```
 
 Web layout:
