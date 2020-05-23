@@ -1,6 +1,6 @@
 # NTU-Court-Search
 Environment:
-* python 3
+* python 3.6
 
 Requirement:
 * requests
