@@ -2,8 +2,9 @@ import configparser
 import logging
 
 import telegram
+from telegram import Update, Bot
 from flask import Flask, request
-from telegram.ext import Dispatcher, MessageHandler, Filters
+from telegram.ext import Dispatcher, MessageHandler, Filters, CallbackContext
 
 import courtCrawler
 
@@ -20,7 +21,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 # Initial bot by Telegram access token
-bot = telegram.Bot(token=(config['TELEGRAM']['ACCESS_TOKEN']))
+bot = Bot(token=(config['TELEGRAM']['ACCESS_TOKEN']))
 
 crawler = courtCrawler.crawler()
 
@@ -35,7 +36,7 @@ def webhook_handler():
     return 'ok'
 
 
-def reply_handler(bot, update):
+def reply_handler(update: Update, context: CallbackContext):
     """Reply message."""
     text = update.message.text
     print(text)
@@ -45,7 +46,7 @@ def reply_handler(bot, update):
 
 
 # New a dispatcher for bot
-dispatcher = Dispatcher(bot, None)
+dispatcher = Dispatcher(bot, None, use_context=True)
 
 # Add handler for handling message, there are many kinds of message. For this handler, it particular handle text message.
 dispatcher.add_handler(MessageHandler(Filters.text, reply_handler))
@@ -53,6 +54,6 @@ dispatcher.add_handler(MessageHandler(Filters.text, reply_handler))
 if __name__ == "__main__":
     # Running server
     app.run(host = '0.0.0.0',
-			port = 5000,
+            port = 5000,
             ssl_context = (config['TELEGRAM']['CERT'], config['TELEGRAM']['KEY']),
-			debug = True)
+            debug = True)
