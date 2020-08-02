@@ -4,3 +4,7 @@ djangoWeb/db.sqlite3
 djangoWeb/djangoWeb/__pycache__/*
 djangoWeb/home/__pycache__/*
 djangoWeb/home/migrations/__pycache__/*
+
+tg-bot/*.pem
+tg-bot/config.ini
+tg-bot/test.py
