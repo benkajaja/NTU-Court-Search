@@ -39,7 +39,8 @@ def webhook_handler():
 def reply_handler(update: Update, context: CallbackContext):
     """Reply message."""
     text = update.message.text
-    print(text)
+    # print(text)
+    logger.info('Input Text: %s', text)
     # update.message.reply_text(text)
     update.message.reply_text(crawler.getText(text))
 
