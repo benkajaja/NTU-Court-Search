@@ -1,7 +1,6 @@
 import configparser
 import logging
 
-import telegram
 from telegram import Update, Bot
 from flask import Flask, request
 from telegram.ext import Dispatcher, MessageHandler, Filters, CallbackContext
@@ -29,7 +28,7 @@ crawler = courtCrawler.crawler()
 def webhook_handler():
     """Set route /hook with POST method will trigger this method."""
     if request.method == "POST":
-        update = telegram.Update.de_json(request.get_json(force=True), bot)
+        update = Update.de_json(request.get_json(force=True), bot)
 
         # Update dispatcher process that handler to process this message
         dispatcher.process_update(update)
