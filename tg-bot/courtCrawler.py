@@ -24,15 +24,11 @@ class crawler():
             return self.craw_court()
         else:
             text = ""
-            
-            # if not date: requestTime = datetime.now()
-            # else: requestTime = datetime.strptime(date, "%Y/%m")
-
             requestTime = self.validateInputDate(input)
 
             requestDateS =  datetime(requestTime.year,requestTime.month,1).strftime("%Y-%m-%d")
             requestDateE =  datetime(requestTime.year,requestTime.month,calendar.monthrange(requestTime.year, requestTime.month)[1]).strftime("%Y-%m-%d")
-            print("From %s To %s" % (requestDateS, requestDateE))
+            # print("From %s To %s" % (requestDateS, requestDateE))
             res = []
             isDrawn = True
 
