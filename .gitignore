@@ -8,3 +8,5 @@ djangoWeb/home/migrations/__pycache__/*
 tg-bot/*.pem
 tg-bot/config.ini
 tg-bot/test.py
+
+aws-lambda/test.py
