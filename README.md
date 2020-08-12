@@ -6,11 +6,11 @@ Requirement:
 * requests
 * django (for django project)
 
-To do list: (挖坑區)
+To do list: (挖坑區) **[2020/08/12 填完坑拉：）]**
 * django :white_check_mark:
 * semantic ui :white_check_mark:
-* AWS Lambda
-* Telegram API
+* AWS Lambda :white_check_mark:
+* Telegram API :white_check_mark:
 * 有夢最美
 
 Usage(only for crawler):
