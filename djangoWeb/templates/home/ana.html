@@ -75,14 +75,15 @@
                         <td>
                             {% if d.date != 0 %}
                                 {{d.date}}
-                                {% if d.courts %}
-                                    {% for r in d.courts %}
+                                {% for r in d.sticks %}
                                     <br>
-                                    <div class="ui red label">
-                                        {{r.venueName}} {{r.rentTimePeriod}}
+                                    <!-- <div class="ui red label">
+                                        {{r.courtID}} {{r.poolAcnt}} {{r.poolBcnt}}
+                                    </div> -->
+                                    <div class="column">
+                                        {{r.courtID}}<br>{{r.poolAcnt}}<br>{{r.poolBcnt}}
                                     </div>
-                                    {% endfor %}
-                                {% endif %}
+                                {% endfor %}
                             {% endif %}
                         </td>
                         {% endfor %}
