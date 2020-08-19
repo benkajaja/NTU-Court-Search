@@ -14,84 +14,93 @@
         <script type="text/javascript" src="{% static 'js/component.js'%}"></script>
     </head>
     <body>
-        <div>
+        <!-- <div>
             <br>
-        </div>
-        
-            <div class="ui two column middle aligned relaxed stackable grid">
-                <div class="column">
-                    <h1>
-                    <i class="calendar icon"></i>
-                    {{requestTime.year}}-{{requestTime.month}}
-                    </h1>
-                </div>
-                <div class="column">
-                    <form class="ui form" action="." method="GET">
-                        <input type="text" class="ui center aligned" style=width:70px name="year" value = {{requestYear}}>
-                        <select class="ui dropdown"  name="month" value = {{requestMonth}}>
-                            <!-- <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option> -->
-                            {% for m in monthList %}
-                                {% if m ==  requestMonth %}
-                                <option value={{m}} selected>{{m}}</option>
-                                {% else %}
-                                <option value={{m}}>{{m}}</option>
-                                {% endif %}
-                            {% endfor %}
-
-                        </select>
-                        <button class="ui teal button" type="submit">Search</button>
-                    </form>
+        </div> -->
+        <div class="ui grid">
+            <div class="sixteen wide column"></div>
+            <div class="eight wide column">
+                <div class="ui grid">
+                    <div class="four wide middle aligned column">
+                        <h1>
+                        <i class="calendar icon"></i>
+                        {{requestTime.year}}-{{requestTime.month}}
+                        </h1>
+                    </div>
+                    <div class="four wide middle aligned column">
+                        {% if isDrawn %}
+                            <div class = "ui green label"><h4>已抽</h4></div>
+                        {% else %}
+                            <div class = "ui red label"><h4>未抽</h4></div>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        
-        <div>
-            <table class="ui celled table">
-                <thead>
-                    <tr>
-                        <th>Mon.</th>
-                        <th>Tue.</th>
-                        <th>Wed.</th>
-                        <th>Thu.</th>
-                        <th>Fri.</th>
-                        <th>Sat.</th>
-                        <th>Sun.</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for w in cal %}
-                     <tr class="top aligned">
-                        {% for d in w %}
-                        <td>
-                            {% if d.date != 0 %}
-                                {{d.date}}
-                                {% for r in d.sticks %}
-                                    <br>
-                                    <!-- <div class="ui red label">
-                                        {{r.courtID}} {{r.poolAcnt}} {{r.poolBcnt}}
-                                    </div> -->
-                                    <div class="column">
-                                        {{r.courtID}}<br>{{r.poolAcnt}}<br>{{r.poolBcnt}}
+            <div class="eight wide column">
+                <form class="ui form"  action="ana" method="GET">
+                    <input type="text" class="ui center aligned" style=width:70px name="year" value = {{requestYear}}>
+                    <select class="ui dropdown"  name="month" value = {{requestMonth}}>
+                        <option value="1"  {{monthselect.0 }}>1 </option>
+                        <option value="2"  {{monthselect.1 }}>2 </option>
+                        <option value="3"  {{monthselect.2 }}>3 </option>
+                        <option value="4"  {{monthselect.3 }}>4 </option>
+                        <option value="5"  {{monthselect.4 }}>5 </option>
+                        <option value="6"  {{monthselect.5 }}>6 </option>
+                        <option value="7"  {{monthselect.6 }}>7 </option>
+                        <option value="8"  {{monthselect.7 }}>8 </option>
+                        <option value="9"  {{monthselect.8 }}>9 </option>
+                        <option value="10" {{monthselect.9 }}>10</option>
+                        <option value="11" {{monthselect.10}}>11</option>
+                        <option value="12" {{monthselect.11}}>12</option>
+                    </select>
+                    <button class="ui teal button" type="submit">Search</button>
+                </form>
+            </div>
+            <div class="sixteen wide column">
+                <table class="ui celled table">
+                    <thead>
+                        <tr>
+                            <th>Mon.</th>
+                            <th>Tue.</th>
+                            <th>Wed.</th>
+                            <th>Thu.</th>
+                            <th>Fri.</th>
+                            <th>Sat.</th>
+                            <th>Sun.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for w in cal %}
+                        <tr>
+                            {% for d in w %}
+                            <td>
+                                {% if d.date != 0 %}
+                                    <div class="ui grid">
+                                        <div class="sixteen wide top aligned column"><h3>{{d.date}}</h3></div>
                                     </div>
-                                {% endfor %}
-                            {% endif %}
-                        </td>
+                                    <div class="ui horizontal divider">18:00</div>
+                                    <div class="ui grid">
+                                        <div class="four wide column center aligned"><div class = "ui {{d.colors.0}} large label">{{d.sticks.0}}</div></div>
+                                        <div class="four wide column center aligned"><div class = "ui {{d.colors.1}} large label">{{d.sticks.1}}</div></div>
+                                        <div class="four wide column center aligned"><div class = "ui {{d.colors.2}} large label">{{d.sticks.2}}</div></div>
+                                        <div class="four wide column center aligned"><div class = "ui {{d.colors.3}} large label">{{d.sticks.3}}</div></div>
+                                    </div>
+                                    <div class="ui horizontal divider">20:00</div>
+                                    <div class="ui grid">
+                                        <div class="four wide column center aligned"><div class = "ui {{d.colors.4}} large label">{{d.sticks.4}}</div></div>
+                                        <div class="four wide column center aligned"><div class = "ui {{d.colors.5}} large label">{{d.sticks.5}}</div></div>
+                                        <div class="four wide column center aligned"><div class = "ui {{d.colors.6}} large label">{{d.sticks.6}}</div></div>
+                                        <div class="four wide column center aligned"><div class = "ui {{d.colors.7}} large label">{{d.sticks.7}}</div></div>
+                                    </div>
+                                    
+                                {% endif %}
+                            </td>
+                            {% endfor %}
+                            </tr>                    
                         {% endfor %}
-                     </tr>                    
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        
     </body>
 </html>

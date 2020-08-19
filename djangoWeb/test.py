@@ -18,13 +18,16 @@ requestDateS =  datetime(requestTime.year,requestTime.month,1).strftime("%Y-%m-%
 requestDateE =  datetime(requestTime.year,requestTime.month,calendar.monthrange(requestTime.year, requestTime.month)[1]).strftime("%Y-%m-%d")
 requestStatus = []
 monthList = [i for i in range(1,13)]
-res = []
-isDrawn = True
 
 ## calendar
 weekdayS = calendar.monthrange(requestTime.year,requestTime.month)[0]
 days = calendar.monthrange(requestTime.year,requestTime.month)[1]
 weeks = math.ceil((weekdayS+days)/7)
+
+# res = []
+res = [[0] * 8 for i in range(days)]
+
+isDrawn = True
 
 ## crawler
 for court in requestvenueId:
@@ -40,9 +43,11 @@ for court in requestvenueId:
         poolB = [x for x in j3 if x['rentTimePeriod'] == '20:00~22:00']
         print(daystr[:10], len(poolA), len(poolB))
         # 'rentDate': '2020-09-30 00:00:00'
-        res.append({"date":day, "courtID":int(court)-82, "poolAcnt": len(poolA), "poolBcnt": len(poolB)})
+        res[day-1][int(court)-86] = len(poolA)
+        res[day-1][int(court)-82] = len(poolB)
+        # res.append({"date":day, "courtID":int(court)-82, "poolAcnt": len(poolA), "poolBcnt": len(poolB)})
 
-    res.sort(key = lambda s: s['date'])
+    # res.sort(key = lambda s: s['date'])
 
     # print(int(court)-82)
     # print(len(poolA))
@@ -61,35 +66,13 @@ for court in requestvenueId:
     # requestStatus.append({'courtID':int(court)-82, 'requestChk': r.status_code == 200})
 
 
-
-
-
 cal = [[{"date":0, "sticks":[]} for _ in range(7)] for _ in range(weeks)]
 for i in range(1,days+1):
-    cal[(i+weekdayS-1)//7][(i+weekdayS-1)%7] = {"date":i, "sticks":[]}
+    cal[(i+weekdayS-1)//7][(i+weekdayS-1)%7] = {"date":i, "sticks":res[i-1]}
 
-for i in res:
-    date = int(i['date'])
-    cal[(date+weekdayS-1)//7][(date+weekdayS-1)%7]['sticks'].append(i)
+# for i in range(days)
+#     date = int(i['date'])
+#     cal[(date+weekdayS-1)//7][(date+weekdayS-1)%7]['sticks'].append(i)
 
-print(cal)
-
-## current output
-# [
-#     {'date': 23, 
-#     'sticks': [
-#         {'courtID': 4, 'poolAcnt': 0, 'poolBcnt': 2}, 
-#         {'courtID': 5, 'poolAcnt': 3, 'poolBcnt': 3}, 
-#         {'courtID': 6, 'poolAcnt': 4, 'poolBcnt': 4}, 
-#         {'courtID': 7, 'poolAcnt': 1, 'poolBcnt': 3}]
-#     },
-#     {'date': 24, 
-#     'sticks': [
-#         {'courtID': 4, 'poolAcnt': 0, 'poolBcnt': 2}, 
-#         {'courtID': 5, 'poolAcnt': 3, 'poolBcnt': 0}, 
-#         {'courtID': 6, 'poolAcnt': 2, 'poolBcnt': 4}, 
-#         {'courtID': 7, 'poolAcnt': 1, 'poolBcnt': 3}]
-#     }
-# ]
-
+# print(cal)
 
