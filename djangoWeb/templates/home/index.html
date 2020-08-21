@@ -14,96 +14,97 @@
         <script type="text/javascript" src="{% static 'js/component.js'%}"></script>
     </head>
     <body>
-        <div>
-            <br>
-        </div>
-        
-            <div class="ui two column middle aligned relaxed stackable grid">
-                <div class="column">
-                    <h1>
-                    <i class="calendar icon"></i>
-                    {{requestTime.year}}-{{requestTime.month}}
-                    </h1>
-                </div>
-                <div class="column">
-                    <form class="ui form" action="." method="GET">
-                        <input type="text" class="ui center aligned" style=width:70px name="year" value = {{requestYear}}>
-                        <select class="ui dropdown"  name="month" value = {{requestMonth}}>
-                            <!-- <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option> -->
-                            {% for m in monthList %}
-                                {% if m ==  requestMonth %}
-                                <option value={{m}} selected>{{m}}</option>
-                                {% else %}
-                                <option value={{m}}>{{m}}</option>
+        <div class="ui grid">
+            <div class="sixteen wide column"></div>
+            <div class="eight wide column">
+                <div class="ui grid">
+                    <div class="four wide middle aligned column">
+                        <h1>
+                        <i class="calendar icon"></i>
+                        {{requestTime.year}}-{{requestTime.month}}
+                        </h1>
+                    </div>
+                    <div class="eight wide middle aligned column">                        
+                        <form class="ui form"  action="ana" method="GET">
+                            <div class="ui left labeled button">
+                                {% if isDrawn %} 
+                                    <div class = "ui green label">已抽</div>
+                                {% else %} 
+                                    <div class = "ui label">未抽</div>
                                 {% endif %}
-                            {% endfor %}
-
-                        </select>
-                        <button class="ui teal button" type="submit">Search</button>
-                    </form>
+                                <button class="ui icon olive button">
+                                    <i class="chart bar icon"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        
-        <div>
-            <table class="ui celled table">
-                <thead>
-                    <tr>
-                        <th>Mon.</th>
-                        <th>Tue.</th>
-                        <th>Wed.</th>
-                        <th>Thu.</th>
-                        <th>Fri.</th>
-                        <th>Sat.</th>
-                        <th>Sun.</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for w in cal %}
-                     <tr class="top aligned">
-                        {% for d in w %}
-                        <td>
-                            {% if d.date != 0 %}
-                                {{d.date}}
-                                {% if d.courts %}
-                                    {% for r in d.courts %}
-                                    <br>
-                                    <div class="ui red label">
-                                        {{r.venueName}} {{r.rentTimePeriod}}
-                                    </div>
-                                    {% endfor %}
+            <div class="eight wide column">
+                <form class="ui form" action="." method="GET">
+                        <input type="text" class="ui center aligned" style=width:70px name="year" value = {{requestYear}}>
+                        <select class="ui dropdown"  name="month" value = {{requestMonth}}>
+                            <option value="1"  {{monthselect.0 }}>1 </option>
+                            <option value="2"  {{monthselect.1 }}>2 </option>
+                            <option value="3"  {{monthselect.2 }}>3 </option>
+                            <option value="4"  {{monthselect.3 }}>4 </option>
+                            <option value="5"  {{monthselect.4 }}>5 </option>
+                            <option value="6"  {{monthselect.5 }}>6 </option>
+                            <option value="7"  {{monthselect.6 }}>7 </option>
+                            <option value="8"  {{monthselect.7 }}>8 </option>
+                            <option value="9"  {{monthselect.8 }}>9 </option>
+                            <option value="10" {{monthselect.9 }}>10</option>
+                            <option value="11" {{monthselect.10}}>11</option>
+                            <option value="12" {{monthselect.11}}>12</option>
+                        </select>
+                        <button class="ui teal button" type="submit">Search</button>
+                </form>
+            </div>
+            <div class="sixteen wide column">
+                <table class="ui celled table">
+                    <thead>
+                        <tr>
+                            <th>Mon.</th>
+                            <th>Tue.</th>
+                            <th>Wed.</th>
+                            <th>Thu.</th>
+                            <th>Fri.</th>
+                            <th>Sat.</th>
+                            <th>Sun.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for w in cal %}
+                         <tr class="top aligned">
+                            {% for d in w %}
+                            <td>
+                                {% if d.date != 0 %}
+                                    {{d.date}}
+                                    {% if d.courts %}
+                                        {% for r in d.courts %}
+                                        <br>
+                                        <div class="ui red label">
+                                            {{r.venueName}} {{r.rentTimePeriod}}
+                                        </div>
+                                        {% endfor %}
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
-                        </td>
+                            </td>
+                            {% endfor %}
+                         </tr>                    
                         {% endfor %}
-                     </tr>                    
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div>
-            {% if isDrawn %}
-            <div class="ui blue label">已抽</div>
-            {% else %}
-            <div class="ui label">未抽</div>
-            {% endif %}
-            {% for s in requestStatus %}
-                {% if s.requestChk %}
-                <div class="ui green label">{{s.courtID}}</div>
-                {% else %}
-                <div class="ui red label">{{s.courtID}}</div>
-                {% endif %}
-            {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="sixteen wide column">
+                {% for s in requestStatus %}
+                    {% if s.requestChk %}
+                    <div class="ui green label">{{s.courtID}}</div>
+                    {% else %}
+                    <div class="ui red label">{{s.courtID}}</div>
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
     </body>
 </html>

@@ -14,9 +14,6 @@
         <script type="text/javascript" src="{% static 'js/component.js'%}"></script>
     </head>
     <body>
-        <!-- <div>
-            <br>
-        </div> -->
         <div class="ui grid">
             <div class="sixteen wide column"></div>
             <div class="eight wide column">
@@ -27,12 +24,19 @@
                         {{requestTime.year}}-{{requestTime.month}}
                         </h1>
                     </div>
-                    <div class="four wide middle aligned column">
-                        {% if isDrawn %}
-                            <div class = "ui green label"><h4>已抽</h4></div>
-                        {% else %}
-                            <div class = "ui red label"><h4>未抽</h4></div>
-                        {% endif %}
+                    <div class="eight wide middle aligned column">                        
+                        <form class="ui form"  action="." method="GET">
+                            <div class="ui left labeled button">
+                                {% if isDrawn %} 
+                                    <div class = "ui green label">已抽</div>
+                                {% else %} 
+                                    <div class = "ui label">未抽</div>
+                                {% endif %}
+                                <button class="ui icon olive button">
+                                    <i class="home icon"></i>
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

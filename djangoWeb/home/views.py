@@ -29,6 +29,8 @@ def index(request):
     requestDateE =  datetime(requestTime.year,requestTime.month,calendar.monthrange(requestTime.year, requestTime.month)[1]).strftime("%Y-%m-%d")
     requestStatus = []
     monthList = [i for i in range(1,13)]
+    monthselect = [""]*12
+    monthselect[requestMonth-1] = "selected"
     res = []
     isDrawn = True
 
