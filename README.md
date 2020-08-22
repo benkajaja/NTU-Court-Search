@@ -22,7 +22,7 @@ $ python3 NTU-Court-Search/main.py
 ```
 
 ## Take a look
-* Web layout:
+* Web layout
 
 ![](https://i.imgur.com/zQjB0xZ.png)
 

@@ -15,7 +15,7 @@
 $ python3 NTU-Court-Search/djangoWeb/manage.py runserver
 ```
 
-### Web layouts:
+### Web layouts
 * Request courts
 ![](https://i.imgur.com/zQjB0xZ.png)
 * Count sticks
