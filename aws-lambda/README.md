@@ -1,6 +1,6 @@
 # NTU-Court-Search #aws-lambda
 
-使用aws educate的帳戶，創建一個lambda function，定期去爬球場的資訊，並推播到Telegram Channel
+使用aws educate的帳戶，創建一個Lambda function，定期去爬球場的資訊，並推播到Telegram Channel
 
 ## Development
 
@@ -21,7 +21,7 @@ $ zip -r requestsLayer python ## upload requestLayer.zip
 
 ### IAM(Identity and Access Management)
 * 新增政策:
-找到之前lambda創建的角色，並新增政策**AWSLambdaInvocation-DynamoDB**，如果沒有新增這個政策，則Dynamo無法觸發Lambda function
+找到之前Lambda創建的角色，並新增政策**AWSLambdaInvocation-DynamoDB**，如果沒有新增這個政策，則Dynamo無法觸發Lambda function
 
 ### DynamoDB
 本來用EventBridge就可以輕鬆搞定觸發事件，但因AWS educate沒有開放使用EventBridge，所以只好繞道而行，這裡使用的是DynamoDB TTL來觸發Lambda，當TTL時間到的時候就會刪除該筆資料，進而觸發Lambda。

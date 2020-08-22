@@ -3,7 +3,7 @@
 This project contains 3 parts
 * Django web(with semantic-ui)
 * Telegram Bot
-* Telegram Channel(with AWS lambda)
+* Telegram Channel(with AWS Lambda)
 
 For more information please check README file in each subfolder
 
@@ -23,8 +23,11 @@ $ python3 NTU-Court-Search/main.py
 
 ## Take a look
 * Web layout:
+
 ![](https://i.imgur.com/zQjB0xZ.png)
+
 * TG channel
+
 ![](https://i.imgur.com/iiDiJPH.png)
 
 ## Thanks to
