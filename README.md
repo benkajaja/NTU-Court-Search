@@ -1,36 +1,31 @@
 # NTU-Court-Search
-Environment:
-* python 3.6
 
-Requirement:
-* requests
-* django (for django project)
+This project contains 3 parts
+* Django web(with semantic-ui)
+* Telegram Bot
+* Telegram Channel(with AWS lambda)
 
-To do list: (挖坑區) **[2020/08/12 填完坑拉：）]**
+For more information please check README file in each subfolder
+
+## Features a.k.a 挖坑區
 * django :white_check_mark:
 * semantic ui :white_check_mark:
 * AWS Lambda :white_check_mark:
 * Telegram API :white_check_mark:
-* 有夢最美
+* **[2020/08/12 填完坑拉：）]**
+* 持續挖坑
 
-Usage(only for crawler):
-* Windows
+## Usage
+You can simply get information of courts in current month by running 
 ```
-$ python main.py
-```
-
-* Linux/MacOS
-```
-$ python3 main.py
+$ python3 NTU-Court-Search/main.py
 ```
 
-Run Django Web:
-```
-$ python3 djangoWeb/manage.py runserver
-```
+## Take a look
+* Web layout:
+![](https://i.imgur.com/zQjB0xZ.png)
+* TG channel
+![](https://i.imgur.com/iiDiJPH.png)
 
-Web layout:
-![image](https://i.imgur.com/JhEjh4h.png)
-
-Thanks to
+## Thanks to
 - [Daniel Tsai](https://github.com/daniel0076)
