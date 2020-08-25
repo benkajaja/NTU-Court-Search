@@ -20,3 +20,8 @@ $ python3 NTU-Court-Search/djangoWeb/manage.py runserver
 ![](https://i.imgur.com/zQjB0xZ.png)
 * Count sticks
 ![](https://i.imgur.com/WX9RU37.png)
+
+## Change Log
+
+2020/8/25 
+* Use multiple threads for crawling

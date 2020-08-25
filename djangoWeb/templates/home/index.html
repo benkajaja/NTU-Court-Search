@@ -96,15 +96,6 @@
                     </tbody>
                 </table>
             </div>
-            <div class="sixteen wide column">
-                {% for s in requestStatus %}
-                    {% if s.requestChk %}
-                    <div class="ui green label">{{s.courtID}}</div>
-                    {% else %}
-                    <div class="ui red label">{{s.courtID}}</div>
-                    {% endif %}
-                {% endfor %}
-            </div>
         </div>
     </body>
 </html>
