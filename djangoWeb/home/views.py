@@ -39,6 +39,7 @@ def index(request):
     else:
         requestYear = datetime.now().year
 
+    currentYear = datetime.now().year ## for copyright year
     requestTime = datetime(requestYear, requestMonth, 1)
     requestDateS =  datetime(requestTime.year,requestTime.month,1).strftime("%Y-%m-%d") ## yyyy-MM-dd
     requestDateE =  datetime(requestTime.year,requestTime.month,calendar.monthrange(requestTime.year, requestTime.month)[1]).strftime("%Y-%m-%d") ## yyyy-MM-dd
@@ -126,6 +127,7 @@ def ana(request):
     else:
         requestYear = (datetime.now() + timedelta(days=31)).year
     
+    currentYear = datetime.now().year ## for copyright year
     requestTime = datetime(requestYear, requestMonth, 1)
     requestDateS =  datetime(requestTime.year,requestTime.month,1).strftime("%Y-%m-%d") ## yyyy-MM-dd
     requestDateE =  datetime(requestTime.year,requestTime.month,calendar.monthrange(requestTime.year, requestTime.month)[1]).strftime("%Y-%m-%d") ## yyyy-MM-dd
