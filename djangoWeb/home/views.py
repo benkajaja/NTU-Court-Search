@@ -162,7 +162,7 @@ def ana(request):
             isDrawn &= data['isDrawn']
 
     ## calendar
-    cal = [[{"date":0, "sticks":[], "colors":[]} for _ in range(7)] for _ in range(weeks)]
+    cal = [[{"date":0, "sticks":[], "colors":[], "colColor": False} for _ in range(7)] for _ in range(weeks)]
     for i in range(1,days+1):
         color = res[i-1].copy()
         for j in range(8):
@@ -170,7 +170,7 @@ def ana(request):
             elif color[j] < 5: color[j] = "green"
             elif color[j] < 10: color[j] = "orange"
             else: color[j] = "red"
-        cal[(i+weekdayS-1)//7][(i+weekdayS-1)%7] = {"date":i, "sticks":res[i-1], "colors": color}
+        cal[(i+weekdayS-1)//7][(i+weekdayS-1)%7] = {"date":i, "sticks":res[i-1], "colors": color, "colColor": (i+weekdayS-1)%7 in [1, 4]}
 
     return render(request, 'home/ana.html', locals())
 

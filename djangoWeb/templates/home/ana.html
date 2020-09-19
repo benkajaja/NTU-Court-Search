@@ -77,7 +77,11 @@
                         {% for w in cal %}
                         <tr>
                             {% for d in w %}
+                            {% if d.colColor%}
+                            <td class="active">
+                            {% else %}
                             <td>
+                            {% endif %}
                                 {% if d.date != 0 %}
                                     <div class="ui grid">
                                         <div class="sixteen wide top aligned column"><h3>{{d.date}}</h3></div>
