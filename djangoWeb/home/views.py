@@ -170,7 +170,7 @@ def ana(request):
             elif color[j] < 5: color[j] = "green"
             elif color[j] < 10: color[j] = "orange"
             else: color[j] = "red"
-        cal[(i+weekdayS-1)//7][(i+weekdayS-1)%7] = {"date":i, "sticks":res[i-1], "colors": color, "colColor": (i+weekdayS-1)%7 in [1, 4]}
+        cal[(i+weekdayS-1)//7][(i+weekdayS-1)%7] = {"date":i, "sticks":res[i-1], "colors": color, "colColor": (i+weekdayS-1)%7 in [0, 4]}
 
     return render(request, 'home/ana.html', locals())
 
