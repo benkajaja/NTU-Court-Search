@@ -95,6 +95,7 @@
                 "sha256:fec7fb46b10da10d9e1d078d1ff8ed9e05ae14f431fdbd11145edd0550b9a964"
             ],
             "version": "==3.4.6"
+
         },
         "decorator": {
             "hashes": [
