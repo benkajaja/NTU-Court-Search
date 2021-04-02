@@ -1,0 +1,19 @@
+name: Release ncs_djangoweb docker image
+on:
+  push:
+    paths:
+    - 'djangoWeb/**'
+jobs:
+  build-push-image:
+    needs: build-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: name: Push to GitHub Packages
+        uses: docker/build-push-action@v1
+        with:
+          path: djangoWeb
+          username: benkajaja
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: benkajaja/ntu-court-search/ncs_djangoweb
+          tag_with_ref: true
