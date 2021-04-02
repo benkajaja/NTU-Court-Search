@@ -8,7 +8,7 @@ jobs:
     needs: build-image
     runs-on: ubuntu-latest
     steps:
-      - name: name: Push to GitHub Packages
+      - name: Push to GitHub Packages
         uses: docker/build-push-action@v1
         with:
           path: djangoWeb
