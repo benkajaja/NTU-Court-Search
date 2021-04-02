@@ -8,6 +8,12 @@ jobs:
   build-push-image:
     runs-on: ubuntu-latest
     steps:
+      - name: Change repo name to lowercase
+        uses: ASzc/change-string-case-action@v1
+        id: string
+        with:
+          string: ${{ github.repository }}
+    steps:
       - name: Build and push image to GitHub Packages
         uses: docker/build-push-action@v1
         with:
@@ -15,5 +21,5 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          repository: ${{ github.repository }}/ncs_djangoweb
+          repository: ${{ steps.string.outputs.lowercase }}/ncs_djangoweb
           tag_with_ref: true
