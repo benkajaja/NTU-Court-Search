@@ -2,7 +2,7 @@ name: Release
 on:
   push:
     paths:
-    - 'djangoWeb/**'
+      - 'djangoWeb/**'
   workflow_dispatch:
 jobs:
   build-push-image:
@@ -13,7 +13,6 @@ jobs:
         id: string
         with:
           string: ${{ github.repository }}
-    steps:
       - name: Build and push image to GitHub Packages
         uses: docker/build-push-action@v1
         with:
