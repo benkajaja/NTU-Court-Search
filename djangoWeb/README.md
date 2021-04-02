@@ -1,5 +1,7 @@
 # NTU-Court-Search #djangoWeb
 
+[![Release](https://github.com/benkajaja/NTU-Court-Search/actions/workflows/ncs_djangoweb.yml/badge.svg?branch=master)](https://github.com/benkajaja/NTU-Court-Search/actions/workflows/ncs_djangoweb.yml)
+
 ## Environment:
 * django
 * Semantic UI
