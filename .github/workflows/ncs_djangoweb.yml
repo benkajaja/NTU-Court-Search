@@ -3,6 +3,7 @@ on:
   push:
     paths:
     - 'djangoWeb/**'
+  workflow_dispatch:
 jobs:
   build-push-image:
     runs-on: ubuntu-latest
