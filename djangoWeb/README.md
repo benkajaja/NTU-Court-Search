@@ -18,6 +18,7 @@ docker run --name ncs_djangoweb -p 8000:8000 -d docker.pkg.github.com/benkajaja/
 
 ### Run on your host
 ```
+$ pip3 install -r requirements.txt
 $ python3 NTU-Court-Search/djangoWeb/manage.py runserver
 ```
 
