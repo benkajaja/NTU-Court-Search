@@ -12,8 +12,8 @@ For more information please check README file in each subfolder
 * semantic ui :white_check_mark:
 * AWS Lambda :white_check_mark:
 * Telegram API :white_check_mark:
-* **[2020/08/12 填完坑拉：）]**
-* 持續挖坑
+* Deploy ncs_djangoweb image with Github Action :white_check_mark:
+* Deploy AWS resources(dynamoDB, lambda) using AWS CDK
 
 ## Usage
 You can simply get information of courts in current month by running 
