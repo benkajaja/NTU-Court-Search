@@ -4,6 +4,12 @@
 * django
 * Semantic UI
 
+## Easy deployment:
+* using docker
+```
+docker run --name ncs_djangoweb -p 8000:8000 -d docker.pkg.github.com/benkajaja/ntu-court-search/ncs_djangoweb:latest
+```
+
 ## Development:
 ### Prerequisites
 * python 3.6+

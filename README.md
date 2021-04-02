@@ -21,6 +21,11 @@ You can simply get information of courts in current month by running
 $ python3 NTU-Court-Search/main.py
 ```
 
+Try djangoWeb using docker image
+```
+$ docker run --name ncs_djangoweb -p 8000:8000 -d docker.pkg.github.com/benkajaja/ntu-court-search/ncs_djangoweb:latest
+```
+
 ## Take a look
 * Web layout
 
