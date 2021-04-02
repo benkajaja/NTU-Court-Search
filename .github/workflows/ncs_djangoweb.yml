@@ -8,6 +8,10 @@ jobs:
   build-push-image:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Change repo name to lowercase
         uses: ASzc/change-string-case-action@v1
         id: string
