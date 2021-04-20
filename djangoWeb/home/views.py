@@ -93,7 +93,7 @@ def threadIndex(q, key):
     court = key['venueId']
     r = requests.get('https://pe.ntu.edu.tw/api/rent/yearuserrent', params = key)
     j1 = r.json()
-    res = [x for x in j1 if x['yearUserUnitName'] in requestyearUserUnitName and x['statusDraw'] == 1]
+    res = [x for x in j1 if x['yearUserUnitName'] in requestyearUserUnitName and (x['statusDraw'] == 1 or x['statusRent'] == 3)]
     for i in res: i['rentDate'] = i['rentDate'][:10] ## yyyy-MM-dd HH:mm:ss -> yyyy-MM-dd
 
     isDrawn = (not any(jj['statusRent']==2 and jj['statusDraw']==0 for jj in j1)) and j1 != []
