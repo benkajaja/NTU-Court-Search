@@ -1,0 +1,3 @@
+[submodule "cdk-ncs-reminder"]
+	path = cdk-ncs-reminder
+	url = https://github.com/benkajaja/cdk-ncs-reminder.git

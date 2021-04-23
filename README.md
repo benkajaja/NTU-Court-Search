@@ -1,9 +1,10 @@
 # NTU-Court-Search
 
-This project contains 3 parts
+This project contains 4 parts
 * Django web(with semantic-ui)
 * Telegram Bot
 * Telegram Channel(with AWS Lambda)
+* cdk-ncs-reminder (with AWS CDK)
 
 For more information please check README file in each subfolder
 
@@ -13,7 +14,7 @@ For more information please check README file in each subfolder
 * AWS Lambda :white_check_mark:
 * Telegram API :white_check_mark:
 * Deploy ncs_djangoweb image with Github Action :white_check_mark:
-* Deploy AWS resources(dynamoDB, lambda) using AWS CDK
+* Deploy AWS resources(dynamoDB, lambda) using AWS CDK :white_check_mark:
 
 ## Usage
 You can simply get information of courts in current month by running 
