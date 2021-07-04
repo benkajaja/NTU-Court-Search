@@ -23,8 +23,13 @@ $ python3 NTU-Court-Search/main.py
 ```
 
 Try djangoWeb using docker image
+* From docker.io
 ```
-$ docker run --name ncs_djangoweb -p 8000:8000 -d docker.pkg.github.com/benkajaja/ntu-court-search/ncs_djangoweb:latest
+docker run --name ncs_djangoweb -p 8000:8000 -d docker.io/benkajaja/ncs_djangoweb:latest
+```
+* From docker.pkg.github.com (require authentication, `docker login docker.pkg.github.com`)
+```
+docker run --name ncs_djangoweb -p 8000:8000 -d docker.pkg.github.com/benkajaja/ntu-court-search/ncs_djangoweb:latest
 ```
 
 ## Take a look
