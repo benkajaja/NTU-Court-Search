@@ -34,3 +34,4 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry: docker.io
           repository: ${{ secrets.DOCKERHUB_USERNAME }}/ncs_djangoweb
+          tag_with_ref: true
