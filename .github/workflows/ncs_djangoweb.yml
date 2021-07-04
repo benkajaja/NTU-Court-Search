@@ -26,3 +26,10 @@ jobs:
           registry: docker.pkg.github.com
           repository: ${{ steps.string.outputs.lowercase }}/ncs_djangoweb
           tag_with_ref: true
+      - name: Build and push image to DockerHub
+        uses: docker/build-push-action@v1
+        with:
+          path: djangoWeb
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/ncs_djangoweb
