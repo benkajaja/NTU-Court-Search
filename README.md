@@ -1,5 +1,7 @@
 # NTU-Court-Search
 
+[![Release](https://github.com/benkajaja/NTU-Court-Search/actions/workflows/ncs_djangoweb.yml/badge.svg)](https://github.com/benkajaja/NTU-Court-Search/actions/workflows/ncs_djangoweb.yml)
+
 This project contains 4 parts
 * Django web(with semantic-ui)
 * Telegram Bot
