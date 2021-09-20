@@ -2,7 +2,7 @@ import requests
 from datetime import datetime
 import calendar
 
-requestyearUserUnitName = ['資訊工程學系', '資工所', '網媒所']
+requestyearUserUnitName = ['資訊工程學系', '資訊工程學研究所', '資訊網路與多媒體研究所']
 requestvenueId = ['86', '87', '88', '89'] # court 4,5,6,7
 requestTime = datetime.now() # or datetime(2020, 6, 1)
 requestDateS =  datetime(requestTime.year,requestTime.month,1).strftime("%Y-%m-%d")
