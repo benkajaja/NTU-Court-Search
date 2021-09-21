@@ -8,7 +8,7 @@ TOKEN = os.environ['TOKEN']
 CHANNEL = os.environ['CHANNEL']
 WEBURL = os.environ['WEBURL']
 
-requestyearUserUnitName = ['資訊工程學系', '資工所', '網媒所']
+requestyearUserUnitName = ['資訊工程學系', '資訊工程學研究所', '資訊網路與多媒體研究所']
 requestvenueId = ['86', '87', '88', '89'] # court 4,5,6,7
 weekday = ['一', '二', '三', '四', '五', '六', '日']
 
@@ -43,6 +43,9 @@ def getCrawlResult(time):
 
         key = {'rentDateS': requestDateS, 'rentDateE': requestDateE, 'venueId': court}
         r = requests.get('https://pe.ntu.edu.tw/api/rent/yearuserrent', params = key)
+
+        if r.status_code != 200:
+            return f"Request failed with status: {r.status_code}\n"
 
         j1 = r.json()
         isDrawn = isDrawn and (not any(jj['statusRent']==2 and jj['statusDraw']==0 for jj in j1)) and r.json() != []
