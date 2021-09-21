@@ -10,6 +10,7 @@ python-telegram-bot = "*"
 flask = "*"
 gunicorn = "*"
 requests = "*"
+six = "*"
 
 [requires]
 python_version = "3.6"
