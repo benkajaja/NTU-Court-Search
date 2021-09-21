@@ -44,6 +44,9 @@ def getCrawlResult(time):
         key = {'rentDateS': requestDateS, 'rentDateE': requestDateE, 'venueId': court}
         r = requests.get('https://pe.ntu.edu.tw/api/rent/yearuserrent', params = key)
 
+        if r.status_code != 200:
+            return f"Request failed with status: {r.status_code}\n"
+
         j1 = r.json()
         isDrawn = isDrawn and (not any(jj['statusRent']==2 and jj['statusDraw']==0 for jj in j1)) and r.json() != []
         j2 = [x for x in j1 if x['statusDraw'] == 1] # 1: winner 2: loser
