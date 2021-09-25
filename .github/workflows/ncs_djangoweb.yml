@@ -35,4 +35,4 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/ncs_djangoweb:latest
-            ghcr.io/${{ github.actor }}/${{ steps.string.outputs.lowercase }}/ncs_djangoweb:latest
+            ghcr.io/${{ steps.string.outputs.lowercase }}/ncs_djangoweb:latest
