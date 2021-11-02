@@ -25,18 +25,25 @@
                         </h1>
                     </div>
                     <div class="eight wide middle aligned column">                        
-                        <form class="ui form"  action="." method="GET">
-                            <div class="ui left labeled button">
-                                {% if isDrawn %} 
-                                    <div class = "ui green label">已抽</div>
-                                {% else %} 
-                                    <div class = "ui label">未抽</div>
-                                {% endif %}
-                                <button class="ui icon olive button">
-                                    <i class="home icon"></i>
-                                </button>
-                            </div>
-                        </form>
+                        <div class="ui buttons">
+                            {% if isDrawn %}
+                            <button class="ui green disabled button" style="opacity: 1!important;">已抽</button>
+                            {% else %} 
+                            <button class="ui disabled button" style="opacity: 1!important;">未抽</button>
+                            {% endif %}
+                            <form class="ui form"  action="." method="GET" id="home"></form>
+                            <form class="ui form"  action="ana" method="GET" id="ana"></form>
+                            <form class="ui form"  action="all" method="GET" id="all"></form>
+                            <button class="ui teal button" form="home">
+                                <i class="home icon"></i>
+                            </button>
+                            <button class="ui blue button" form="ana">
+                                <i class="chart bar icon"></i>
+                            </button>
+                            <button class="ui violet button" form="all">
+                                <i class="map icon"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
