@@ -26,9 +26,11 @@
                     </div>
                     <div class="eight wide middle aligned column">                        
                         <div class="ui buttons">
-                            {% if isDrawn %}
+                            {% if isDrawn %} 
+                            <!-- <div class = "ui green label">已抽</div> -->
                             <button class="ui green disabled button" style="opacity: 1!important;">已抽</button>
                             {% else %} 
+                            <!-- <div class = "ui label">未抽</div> -->
                             <button class="ui disabled button" style="opacity: 1!important;">未抽</button>
                             {% endif %}
                             <form class="ui form"  action="." method="GET" id="home"></form>
@@ -48,7 +50,7 @@
                 </div>
             </div>
             <div class="eight wide column">
-                <form class="ui form"  action="ana" method="GET">
+                <form class="ui form"  action="all" method="GET">
                     <input type="text" class="ui center aligned" style=width:70px name="year" value = {{requestYear}}>
                     <select class="ui dropdown"  name="month" value = {{requestMonth}}>
                         <option value="1"  {{monthselect.0 }}>1 </option>
@@ -68,7 +70,7 @@
                 </form>
             </div>
             <div class="sixteen wide column">
-                <table class="ui celled table">
+                <table class="ui celled compact table">
                     <thead>
                         <tr>
                             <th>Mon.</th>
@@ -84,6 +86,7 @@
                         {% for w in cal %}
                         <tr>
                             {% for d in w %}
+                            <!-- <td> -->
                             {% if d.colColor%}
                             <td class="active">
                             {% else %}
@@ -94,18 +97,19 @@
                                         <div class="sixteen wide top aligned column"><h3>{{d.date}}</h3></div>
                                     </div>
                                     <div class="ui horizontal divider">18:00</div>
-                                    <div class="ui grid">
-                                        <div class="four wide column center aligned"><div class = "ui {{d.colors.0}} large label">{{d.sticks.0}}</div></div>
-                                        <div class="four wide column center aligned"><div class = "ui {{d.colors.1}} large label">{{d.sticks.1}}</div></div>
-                                        <div class="four wide column center aligned"><div class = "ui {{d.colors.2}} large label">{{d.sticks.2}}</div></div>
-                                        <div class="four wide column center aligned"><div class = "ui {{d.colors.3}} large label">{{d.sticks.3}}</div></div>
+                                    <div class="ui grid centered">
+                                        
+                                        <div class="row"><div class = "ui teal large label">{{d.sticks.0}}</div></div>
+                                        <div class="row"><div class = "ui teal large label">{{d.sticks.1}}</div></div>
+                                        <div class="row"><div class = "ui teal large label">{{d.sticks.2}}</div></div>
+                                        <div class="row"><div class = "ui teal large label">{{d.sticks.3}}</div></div>
                                     </div>
                                     <div class="ui horizontal divider">20:00</div>
-                                    <div class="ui grid">
-                                        <div class="four wide column center aligned"><div class = "ui {{d.colors.4}} large label">{{d.sticks.4}}</div></div>
-                                        <div class="four wide column center aligned"><div class = "ui {{d.colors.5}} large label">{{d.sticks.5}}</div></div>
-                                        <div class="four wide column center aligned"><div class = "ui {{d.colors.6}} large label">{{d.sticks.6}}</div></div>
-                                        <div class="four wide column center aligned"><div class = "ui {{d.colors.7}} large label">{{d.sticks.7}}</div></div>
+                                    <div class="ui grid centered">
+                                        <div class="row"><div class = "ui blue large label">{{d.sticks.4}}</div></div>
+                                        <div class="row"><div class = "ui blue large label">{{d.sticks.5}}</div></div>
+                                        <div class="row"><div class = "ui blue large label">{{d.sticks.6}}</div></div>
+                                        <div class="row"><div class = "ui blue large label">{{d.sticks.7}}</div></div>
                                     </div>
                                     
                                 {% endif %}
