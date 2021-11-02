@@ -8,6 +8,7 @@ import math
 from queue import Queue
 import threading
 
+TRAINING_DAY = [1,3]
 requestyearUserUnitName = ['資訊工程學系', '資訊工程學研究所', '資訊網路與多媒體研究所']
 requestvenueId = ['86', '87', '88', '89'] # court 4,5,6,7
 
@@ -170,7 +171,7 @@ def ana(request):
             elif color[j] < 5: color[j] = "green"
             elif color[j] < 10: color[j] = "orange"
             else: color[j] = "red"
-        cal[(i+weekdayS-1)//7][(i+weekdayS-1)%7] = {"date":i, "sticks":res[i-1], "colors": color, "colColor": (i+weekdayS-1)%7 in [0, 4]}
+        cal[(i+weekdayS-1)//7][(i+weekdayS-1)%7] = {"date":i, "sticks":res[i-1], "colors": color, "colColor": (i+weekdayS-1)%7 in TRAINING_DAY}
 
     return render(request, 'home/ana.html', locals())
 
