@@ -82,8 +82,6 @@ def index(request):
 
     return render(request, 'home/index.html', {
         "requestTime": requestTime,
-        "requestYear": requestYear,
-        "requestMonth": requestMonth,
         "isDrawn": isDrawn,
         "monthselect": monthselect,
         "cal": cal,
@@ -182,8 +180,6 @@ def ana(request):
 
     return render(request, 'home/ana.html', {
         "requestTime": requestTime,
-        "requestYear": requestYear,
-        "requestMonth": requestMonth,
         "isDrawn": isDrawn,
         "monthselect": monthselect,
         "cal": cal,
@@ -284,8 +280,6 @@ def all(request):
 
     return render(request, 'home/all.html', {
         "requestTime": requestTime,
-        "requestYear": requestYear,
-        "requestMonth": requestMonth,
         "isDrawn": isDrawn,
         "monthselect": monthselect,
         "cal": cal,
