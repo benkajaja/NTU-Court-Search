@@ -1,6 +1,6 @@
-import requests
 from datetime import datetime
 import calendar
+import requests
 
 requestyearUserUnitName = ['資訊工程學系', '資訊工程學研究所', '資訊網路與多媒體研究所']
 requestvenueId = ['86', '87', '88', '89'] # court 4,5,6,7
@@ -12,14 +12,11 @@ res = []
 isDrawn = True
 
 def haveCourt(x):
-    if (x['statusRent'] == 1 or                         ## manual reserve
-        x['statusDraw'] == 1 and x['statusRent'] == 2): ## winner
-        return True
-    else: 
-        return False
+    return (x['statusRent'] == 1 or                         ## manual reserve
+            x['statusDraw'] == 1 and x['statusRent'] == 2)  ## winner
 
 def checkDrawn(x):
-    return (not any(y['statusRent']==2 and y['statusDraw']==0 for y in x)) and x != []
+    return (not any(y['statusRent'] == 2 and y['statusDraw'] == 0 for y in x)) and x != []
 
 ## crawler
 for court in requestvenueId:

@@ -1,8 +1,8 @@
 import json
-import requests
 import os
 from datetime import datetime, timedelta
 import calendar
+import requests
 
 TOKEN = os.environ['TOKEN']
 CHANNEL = os.environ['CHANNEL']
@@ -19,7 +19,7 @@ def lambda_handler(event, context):
     text += getCrawlResult(time)
     text += getInfo(time)
     response = requests.get(url, json = {"chat_id": CHANNEL, "text": text})
-    
+
     return {
         'statusCode': 200,
         'body': json.dumps('Hello from Lambda!')
@@ -28,7 +28,7 @@ def lambda_handler(event, context):
 def getInfo(time):
     text = f"\nFor more information, please check\n{WEBURL}/?year={time.year}&month={time.month}"
     return text
-    
+
 def getCrawlResult(time):
 
     text = ""
@@ -74,11 +74,8 @@ def getCrawlResult(time):
     return text
 
 def haveCourt(x):
-    if (x['statusRent'] == 1 or                         ## manual reserve
-        x['statusDraw'] == 1 and x['statusRent'] == 2): ## winner
-        return True
-    else: 
-        return False
+    return (x['statusRent'] == 1 or                         ## manual reserve
+            x['statusDraw'] == 1 and x['statusRent'] == 2)  ## winner
 
 def checkDrawn(x):
-    return (not any(y['statusRent']==2 and y['statusDraw']==0 for y in x)) and x != []
+    return (not any(y['statusRent'] == 2 and y['statusDraw'] == 0 for y in x)) and x != []

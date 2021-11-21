@@ -106,11 +106,8 @@ class crawler():
         return text
 
 def haveCourt(x):
-    if (x['statusRent'] == 1 or                         ## manual reserve
-        x['statusDraw'] == 1 and x['statusRent'] == 2): ## winner
-        return True
-    else: 
-        return False
+    return (x['statusRent'] == 1 or                         ## manual reserve
+            x['statusDraw'] == 1 and x['statusRent'] == 2)  ## winner
 
 def checkDrawn(x):
-    return (not any(y['statusRent']==2 and y['statusDraw']==0 for y in x)) and x != []
+    return (not any(y['statusRent'] == 2 and y['statusDraw'] == 0 for y in x)) and x != []

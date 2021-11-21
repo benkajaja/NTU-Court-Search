@@ -1,12 +1,10 @@
-from django.shortcuts import render
-# from django.http import HttpResponse, JsonResponse 
-import requests
 from datetime import datetime, timedelta
 import calendar
-import json
 import math
 from queue import Queue
 import threading
+import requests
+from django.shortcuts import render
 
 TRAINING_DAY = [1,3]
 PE_URL = 'https://pe.ntu.edu.tw/api/rent/yearuserrent'
@@ -45,7 +43,6 @@ def index(request):
     requestTime = datetime(requestYear, requestMonth, 1)
     requestDateS =  datetime(requestTime.year,requestTime.month,1).strftime("%Y-%m-%d") ## yyyy-MM-dd
     requestDateE =  datetime(requestTime.year,requestTime.month,calendar.monthrange(requestTime.year, requestTime.month)[1]).strftime("%Y-%m-%d") ## yyyy-MM-dd
-    monthList = [i for i in range(1,13)]
     monthselect = [""]*12
     monthselect[requestMonth-1] = "selected"
     res = []
@@ -66,14 +63,14 @@ def index(request):
         data = q.get()
         res += data['res']
         isDrawn &= data['isDrawn']
-    
+
     res.sort(key = lambda s: s['rentDate'])
 
     ## calendar
     weekdayS = calendar.monthrange(requestTime.year,requestTime.month)[0]
     days = calendar.monthrange(requestTime.year,requestTime.month)[1]
     weeks = math.ceil((weekdayS+days)/7)
-    
+
     cal = [[{"date":0, "courts":[]} for _ in range(7)] for _ in range(weeks)]
     for i in range(1,days+1):
         cal[(i+weekdayS-1)//7][(i+weekdayS-1)%7] = {"date":i, "courts":[]}
@@ -82,8 +79,16 @@ def index(request):
     for i in res:
         date = int(i['rentDate'][-2:])
         cal[(date+weekdayS-1)//7][(date+weekdayS-1)%7]['courts'].append(i)
-    
-    return render(request, 'home/index.html', locals())
+
+    return render(request, 'home/index.html', {
+        "requestTime": requestTime,
+        "requestYear": requestYear,
+        "requestMonth": requestMonth,
+        "isDrawn": isDrawn,
+        "monthselect": monthselect,
+        "cal": cal,
+        "currentYear": currentYear
+    })
 
 def threadIndex(q, key):
     '''
@@ -101,7 +106,7 @@ def threadIndex(q, key):
 
     q.put({
         "court": int(courtId)-82, # 4,5,6,7
-        "res": res, 
+        "res": res,
         "isDrawn": isDrawn})
 
 def ana(request):
@@ -130,12 +135,11 @@ def ana(request):
         requestYear = int(request.GET['year'])
     else:
         requestYear = (datetime.now() + timedelta(days=31)).year
-    
+
     currentYear = datetime.now().year ## for copyright year
     requestTime = datetime(requestYear, requestMonth, 1)
     requestDateS =  datetime(requestTime.year,requestTime.month,1).strftime("%Y-%m-%d") ## yyyy-MM-dd
     requestDateE =  datetime(requestTime.year,requestTime.month,calendar.monthrange(requestTime.year, requestTime.month)[1]).strftime("%Y-%m-%d") ## yyyy-MM-dd
-    monthList = [i for i in range(1,13)]
     monthselect = [""]*12
     monthselect[requestMonth-1] = "selected"
 
@@ -148,7 +152,7 @@ def ana(request):
     isDrawn = True
     q = Queue()
     threads = []
-    
+
     for court in requestvenueId:
         key = {'rentDateS': requestDateS, 'rentDateE': requestDateE, 'venueId': court}
         t = threading.Thread(target=threadAna, args=(q, days, key))
@@ -176,7 +180,15 @@ def ana(request):
             else: color[j] = "red"
         cal[(i+weekdayS-1)//7][(i+weekdayS-1)%7] = {"date":i, "sticks":res[i-1], "colors": color, "colColor": (i+weekdayS-1)%7 in TRAINING_DAY}
 
-    return render(request, 'home/ana.html', locals())
+    return render(request, 'home/ana.html', {
+        "requestTime": requestTime,
+        "requestYear": requestYear,
+        "requestMonth": requestMonth,
+        "isDrawn": isDrawn,
+        "monthselect": monthselect,
+        "cal": cal,
+        "currentYear": currentYear
+    })
 
 def threadAna(q, days, key):
     '''
@@ -199,10 +211,10 @@ def threadAna(q, days, key):
         frontCourt = [x for x in courtsInDay if x['rentTimePeriod'] == '18:00~20:00']
         backCourt = [x for x in courtsInDay if x['rentTimePeriod'] == '20:00~22:00']
         res.append([len(frontCourt), len(backCourt)])
-    
+
     q.put({
         "court": int(courtId)-82, # 4,5,6,7
-        "res": res, 
+        "res": res,
         "isDrawn": isDrawn})
 
 def all(request):
@@ -231,12 +243,11 @@ def all(request):
         requestYear = int(request.GET['year'])
     else:
         requestYear = (datetime.now() + timedelta(days=31)).year
-    
+
     currentYear = datetime.now().year ## for copyright year
     requestTime = datetime(requestYear, requestMonth, 1)
     requestDateS =  datetime(requestTime.year,requestTime.month,1).strftime("%Y-%m-%d") ## yyyy-MM-dd
     requestDateE =  datetime(requestTime.year,requestTime.month,calendar.monthrange(requestTime.year, requestTime.month)[1]).strftime("%Y-%m-%d") ## yyyy-MM-dd
-    monthList = [i for i in range(1,13)]
     monthselect = [""]*12
     monthselect[requestMonth-1] = "selected"
 
@@ -249,7 +260,7 @@ def all(request):
     isDrawn = True
     q = Queue()
     threads = []
-    
+
     for court in requestvenueId:
         key = {'rentDateS': requestDateS, 'rentDateE': requestDateE, 'venueId': court}
         t = threading.Thread(target=threadAll, args=(q, days, key))
@@ -271,7 +282,15 @@ def all(request):
     for i in range(1,days+1):
         cal[(i+weekdayS-1)//7][(i+weekdayS-1)%7] = {"date":i, "sticks":res[i-1], "colColor": (i+weekdayS-1)%7 in TRAINING_DAY}
 
-    return render(request, 'home/all.html', locals())
+    return render(request, 'home/all.html', {
+        "requestTime": requestTime,
+        "requestYear": requestYear,
+        "requestMonth": requestMonth,
+        "isDrawn": isDrawn,
+        "monthselect": monthselect,
+        "cal": cal,
+        "currentYear": currentYear
+    })
 
 def threadAll(q, days, key):
     '''
@@ -300,15 +319,12 @@ def threadAll(q, days, key):
 
     q.put({
         "court": int(courtId)-82, # 4,5,6,7
-        "res": res, 
+        "res": res,
         "isDrawn": isDrawn})
 
 def haveCourt(x):
-    if (x['statusRent'] == 1 or                         ## manual reserve
-        x['statusDraw'] == 1 and x['statusRent'] == 2): ## winner
-        return True
-    else: 
-        return False
+    return (x['statusRent'] == 1 or                         ## manual reserve
+            x['statusDraw'] == 1 and x['statusRent'] == 2)  ## winner
 
 def checkDrawn(x):
-    return (not any(y['statusRent']==2 and y['statusDraw']==0 for y in x)) and x != []
+    return (not any(y['statusRent'] == 2 and y['statusDraw'] == 0 for y in x)) and x != []
