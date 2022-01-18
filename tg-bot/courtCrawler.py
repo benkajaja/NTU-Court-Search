@@ -39,11 +39,10 @@ class crawler():
                 r = requests.get('https://pe.ntu.edu.tw/api/rent/yearuserrent', params = key)
 
                 # print(r.status_code)
-                j1 = r.json()
-                isDrawn = isDrawn and (not any(jj['statusRent']==2 and jj['statusDraw']==0 for jj in j1)) and r.json() != []
-                j2 = [x for x in j1 if x['statusDraw'] == 1] # 1: winner 2: loser
-                j3 = [x for x in j2 if x['yearUserUnitName'] in requestyearUserUnitName]
-                res += j3
+                data = r.json()
+                isDrawn = isDrawn and checkDrawn(data)
+                myCourt = [x for x in data if x['yearUserUnitName'] in requestyearUserUnitName and haveCourt(x)]
+                res += myCourt
 
             if not isDrawn: return "還沒抽呢：）"
 
@@ -86,12 +85,10 @@ class crawler():
             key = {'rentDateS': requestDateS, 'rentDateE': requestDateE, 'venueId': court}
             r = requests.get('https://pe.ntu.edu.tw/api/rent/yearuserrent', params = key)
 
-            # print(r.status_code)
-            j1 = r.json()
-            isDrawn = isDrawn and (not any(jj['statusRent']==2 and jj['statusDraw']==0 for jj in j1)) and r.json() != []
-            j2 = [x for x in j1 if x['statusDraw'] == 1] # 1: winner 2: loser
-            j3 = [x for x in j2 if x['yearUserUnitName'] in requestyearUserUnitName]
-            res += j3
+            data = r.json()
+            isDrawn = isDrawn and checkDrawn(data)
+            myCourt = [x for x in data if x['yearUserUnitName'] in requestyearUserUnitName and haveCourt(x)]
+            res += myCourt
 
         for i in res:
             i['rentDate'] = i['rentDate'][:10]
@@ -107,3 +104,10 @@ class crawler():
             text = text + 'rentTimePeriod:' + str(i['rentTimePeriod']) + '\n'
 
         return text
+
+def haveCourt(x):
+    return (x['statusRent'] == 1 or                         ## manual reserve
+            x['statusDraw'] == 1 and x['statusRent'] == 2)  ## winner
+
+def checkDrawn(x):
+    return (not any(y['statusRent'] == 2 and y['statusDraw'] == 0 for y in x)) and x != []
