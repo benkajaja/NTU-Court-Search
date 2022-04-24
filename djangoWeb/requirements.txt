@@ -1,3 +1,3 @@
-django==3.2.12
+django==4.0.4
 requests
 uwsgi
