@@ -1,15 +1,24 @@
-from datetime import datetime, timedelta
 import calendar
 import math
-from queue import Queue
+import re
 import threading
+from datetime import datetime, timedelta, timezone
+from queue import Queue
+
 import requests
+from bs4 import BeautifulSoup
 from django.shortcuts import render
 
 TRAINING_DAY = [1,4]
-PE_URL = 'https://pe.ntu.edu.tw/api/rent/yearuserrent'
+PE_URL = 'https://rent.pe.ntu.edu.tw/__/f/Schedule.php'
 requestyearUserUnitName = ['資訊工程學系', '資訊工程學研究所', '資訊網路與多媒體研究所']
-requestvenueId = ['86', '87', '88', '89'] # court 4,5,6,7
+requestvenueId = [44, 45, 46, 47] # court 4,5,6,7
+venuesSNToName = {
+    44: "排球場 (4)",
+    45: "排球場 (5)",
+    46: "排球場 (6)",
+    47: "排球場 (7)"
+}
 
 # Create your views here.
 def index(request):
@@ -41,17 +50,21 @@ def index(request):
 
     currentYear = datetime.now().year ## for copyright year
     requestTime = datetime(requestYear, requestMonth, 1)
-    requestDateS =  datetime(requestTime.year,requestTime.month,1).strftime("%Y-%m-%d") ## yyyy-MM-dd
-    requestDateE =  datetime(requestTime.year,requestTime.month,calendar.monthrange(requestTime.year, requestTime.month)[1]).strftime("%Y-%m-%d") ## yyyy-MM-dd
+    requestDateS =  datetime(requestTime.year,requestTime.month,1,tzinfo=timezone(timedelta(hours=8))).timestamp() ## epoch time
+    requestDateE =  datetime(requestTime.year,requestTime.month,calendar.monthrange(requestTime.year, requestTime.month)[1],tzinfo=timezone(timedelta(hours=8))).timestamp() ## epoch time
     monthselect = [""]*12
     monthselect[requestMonth-1] = "selected"
     res = []
-    isDrawn = True
+    isDrawn = checkDrawn(requestYear, requestMonth)
     q = Queue()
     threads = []
 
     for court in requestvenueId:
-        key = {'rentDateS': requestDateS, 'rentDateE': requestDateE, 'venueId': court}
+        key = {
+            "VenuesSN": court,
+            "SDMK": requestDateS,
+            "EDMK": requestDateE
+        }
         t = threading.Thread(target=threadIndex, args=(q, key))
         t.start()
         threads.append(t)
@@ -62,7 +75,6 @@ def index(request):
     for _ in range(q.qsize()):
         data = q.get()
         res += data['res']
-        isDrawn &= data['isDrawn']
 
     res.sort(key = lambda s: s['rentDate'])
 
@@ -95,17 +107,26 @@ def threadIndex(q, key):
         key: contain 'rentDateS', 'rentDateE', 'venueId'
     '''
 
-    courtId = key['venueId']
     r = requests.get(PE_URL, params = key)
-    data = r.json()
-    isDrawn = checkDrawn(data)
-    res = [x for x in data if x['yearUserUnitName'] in requestyearUserUnitName and haveCourt(x)]
-    for i in res: i['rentDate'] = i['rentDate'][:10] ## yyyy-MM-dd HH:mm:ss -> yyyy-MM-dd
 
-    q.put({
-        "court": int(courtId)-82, # 4,5,6,7
-        "res": res,
-        "isDrawn": isDrawn})
+    data = r.json()
+    soup = BeautifulSoup(data['ScheduleList'], "html.parser")
+
+    result = soup.find_all(
+        "div", {"title": re.compile(r'(資訊工程學系|資訊工程學研究所|資訊網路與多媒體研究所)')})
+    res = []
+    for i in result:
+        duration = int(re.findall('[0-9]+', result[0].parent.get_attribute_list('style')[0])[1])
+        start = int(re.findall('[0-9]+', i.parent.previous_sibling.contents[0])[0])
+        rentTimePeriod = f"{start}:00~{start+duration}:00"
+        res.append({
+            "rentDate": i.parent.parent.parent['d'],
+            "venueName": venuesSNToName[key["VenuesSN"]],
+            "rentTimePeriod": rentTimePeriod
+        })
+
+
+    q.put({"res": res})
 
 def ana(request):
     '''
@@ -198,7 +219,6 @@ def threadAna(q, days, key):
     r = requests.get(PE_URL, params = key)
     data = r.json()
 
-    isDrawn = checkDrawn(data)
     res = []
 
     for day in range(1,days+1):
@@ -210,8 +230,7 @@ def threadAna(q, days, key):
 
     q.put({
         "court": int(courtId)-82, # 4,5,6,7
-        "res": res,
-        "isDrawn": isDrawn})
+        "res": res})
 
 def all(request):
     '''
@@ -242,8 +261,8 @@ def all(request):
 
     currentYear = datetime.now().year ## for copyright year
     requestTime = datetime(requestYear, requestMonth, 1)
-    requestDateS =  datetime(requestTime.year,requestTime.month,1).strftime("%Y-%m-%d") ## yyyy-MM-dd
-    requestDateE =  datetime(requestTime.year,requestTime.month,calendar.monthrange(requestTime.year, requestTime.month)[1]).strftime("%Y-%m-%d") ## yyyy-MM-dd
+    requestDateS =  datetime(requestTime.year,requestTime.month,1,tzinfo=timezone(timedelta(hours=8))).timestamp() ## epoch time
+    requestDateE =  datetime(requestTime.year,requestTime.month,calendar.monthrange(requestTime.year, requestTime.month)[1],tzinfo=timezone(timedelta(hours=8))).timestamp() ## epoch time
     monthselect = [""]*12
     monthselect[requestMonth-1] = "selected"
 
@@ -253,13 +272,17 @@ def all(request):
     weeks = math.ceil((weekdayS+days)/7)
 
     res = [[""] * 8 for i in range(days)]
-    isDrawn = True
+    isDrawn = checkDrawn(requestYear, requestMonth)
     q = Queue()
     threads = []
 
     for court in requestvenueId:
-        key = {'rentDateS': requestDateS, 'rentDateE': requestDateE, 'venueId': court}
-        t = threading.Thread(target=threadAll, args=(q, days, key))
+        key = {
+            "VenuesSN": court,
+            "SDMK": requestDateS,
+            "EDMK": requestDateE
+        }
+        t = threading.Thread(target=threadAll, args=(q, requestTime, days, key))
         t.start()
         threads.append(t)
 
@@ -271,7 +294,6 @@ def all(request):
         for i in range(days):
             res[i][data['court']-4] = data['res'][i][0] # 0,1,2,3 frontCourt
             res[i][data['court']]   = data['res'][i][1] # 4,5,6,7 backCourt
-            isDrawn &= data['isDrawn']
 
     ## calendar
     cal = [[{"date":0, "sticks":[], "colColor": False} for _ in range(7)] for _ in range(weeks)]
@@ -286,39 +308,45 @@ def all(request):
         "currentYear": currentYear
     })
 
-def threadAll(q, days, key):
+def threadAll(q, requestTime: datetime, days, key):
     '''
     input:
         q: return data
+        requestTime: 
         days: number of day in request month
-        key: contain 'rentDateS', 'rentDateE', 'venueId'
+        key: contain 'rentDateS', 'rentDateE', 'VenuesSN'
     '''
 
-    courtId = key['venueId']
-    r = requests.get('https://pe.ntu.edu.tw/api/rent/yearuserrent', params = key)
+    courtId = key['VenuesSN']
+    r = requests.get(PE_URL, params = key)
     data = r.json()
-    isDrawn = checkDrawn(data)
-    courts = [x for x in data if haveCourt(x)]
+    soup = BeautifulSoup(data['ScheduleList'], "html.parser")
 
     res = []
 
     for day in range(1,days+1):
-        daystr = key['rentDateS'][:-2] + str(day).zfill(2) + " 00:00:00" ## yyyy-MM-dd 00:00:00
-        courtsInDay = [x for x in courts if x['rentDate'] == daystr]
-        frontCourt = [x['yearUserUnitName'] for x in courtsInDay if x['rentTimePeriod'] == '18:00~20:00']
-        backCourt = [x['yearUserUnitName'] for x in courtsInDay if x['rentTimePeriod'] == '20:00~22:00']
-        if not frontCourt: frontCourt = [""]
-        if not backCourt: backCourt = [""]
+        courtsInDay = soup.find(
+            "div", {"d": f"{requestTime.year}-{requestTime.month:02}-{day:02}"})
+
+        frontCourtTag = courtsInDay.find("div", {"class": "SText"}, text = "18 ~ 19")
+        if frontCourtTag.next_sibling:
+            frontCourt = [frontCourtTag.next_sibling.findChild()["title"]]
+        else:
+            frontCourt = [""]
+
+        backCourtTag = courtsInDay.find("div", {"class": "SText"}, text = "20 ~ 21")
+        if backCourtTag.next_sibling:
+            backCourt = [backCourtTag.next_sibling.findChild()["title"]]
+        else:
+            backCourt = [""]
+
         res.append(frontCourt + backCourt)
 
     q.put({
-        "court": int(courtId)-82, # 4,5,6,7
-        "res": res,
-        "isDrawn": isDrawn})
+        "court": int(courtId)-40, # 4,5,6,7
+        "res": res})
 
-def haveCourt(x):
-    return (x['statusRent'] == 1 or                         ## manual reserve
-            x['statusDraw'] == 1 and x['statusRent'] == 2)  ## winner
-
-def checkDrawn(x):
-    return (not any(y['statusRent'] == 2 and y['statusDraw'] == 0 for y in x)) and x != []
+def checkDrawn(queryYear, queryMonth):
+    queryDate = datetime(queryYear, queryMonth, 15, tzinfo=timezone(timedelta(hours=8)))
+    releaseDate = (queryDate - timedelta(days=30)).replace(day=20).replace(hour=8)
+    return datetime.now(timezone(timedelta(hours=8))) > releaseDate
