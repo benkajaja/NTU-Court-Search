@@ -1,15 +1,23 @@
 import json
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import calendar
 import requests
+from bs4 import BeautifulSoup
+import re
 
 TOKEN = os.environ['TOKEN']
 CHANNEL = os.environ['CHANNEL']
 WEBURL = os.environ['WEBURL']
 
 requestyearUserUnitName = ['資訊工程學系', '資訊工程學研究所', '資訊網路與多媒體研究所']
-requestvenueId = ['86', '87', '88', '89'] # court 4,5,6,7
+requestvenueId = [44, 45, 46, 47] # court 4,5,6,7
+venuesSNToName = {
+    44: "排球場 (4)",
+    45: "排球場 (5)",
+    46: "排球場 (6)",
+    47: "排球場 (7)"
+}
 weekday = ['一', '二', '三', '四', '五', '六', '日']
 
 def lambda_handler(event, context):
@@ -33,24 +41,35 @@ def getCrawlResult(time):
 
     text = ""
     requestTime = time
-    requestDateS =  datetime(requestTime.year,requestTime.month,1).strftime("%Y-%m-%d")
-    requestDateE =  datetime(requestTime.year,requestTime.month,calendar.monthrange(requestTime.year, requestTime.month)[1]).strftime("%Y-%m-%d")
+    requestDateS =  datetime(requestTime.year,requestTime.month,1,tzinfo=timezone(timedelta(hours=8))).timestamp() ## epoch time
+    requestDateE =  datetime(requestTime.year,requestTime.month,calendar.monthrange(requestTime.year, requestTime.month)[1],tzinfo=timezone(timedelta(hours=8))).timestamp() ## epoch time
     res = []
     isDrawn = True
 
     ## crawler
     for court in requestvenueId:
-
-        key = {'rentDateS': requestDateS, 'rentDateE': requestDateE, 'venueId': court}
-        r = requests.get('https://pe.ntu.edu.tw/api/rent/yearuserrent', params = key)
-
+        key = {
+            "VenuesSN": court,
+            "SDMK": requestDateS,
+            "EDMK": requestDateE
+        }
+        r = requests.get('https://rent.pe.ntu.edu.tw/__/f/Schedule.php', params = key)
+        
         if r.status_code != 200:
             return f"Request failed with status: {r.status_code}\n"
 
         data = r.json()
-        isDrawn = isDrawn and checkDrawn(data)
-        myCourt = [x for x in data if x['yearUserUnitName'] in requestyearUserUnitName and haveCourt(x)]
-        res += myCourt
+        soup = BeautifulSoup(data['ScheduleList'], "html.parser")
+        result = soup.find_all("div", {"title": re.compile(r'(資訊工程學系|資訊工程學研究所|資訊網路與多媒體研究所)')})
+        for i in result:
+            duration = int(re.findall('[0-9]+', result[0].parent.get_attribute_list('style')[0])[1])
+            start = int(re.findall('[0-9]+', i.parent.previous_sibling.contents[0])[0])
+            rentTimePeriod = f"{start}:00~{start+duration}:00"
+            res.append({
+                "rentDate": i.parent.parent.parent['d'],
+                "venueName": venuesSNToName[key["VenuesSN"]],
+                "rentTimePeriod": rentTimePeriod
+            })
 
     if not isDrawn: return "還沒抽呢：）"
 
@@ -72,10 +91,3 @@ def getCrawlResult(time):
         text += f"{i['rentDate']}({i['weekDay']}){i['rentTimePeriodCh']} {i['venueName']}\n"
 
     return text
-
-def haveCourt(x):
-    return (x['statusRent'] == 1 or                         ## manual reserve
-            x['statusDraw'] == 1 and x['statusRent'] == 2)  ## winner
-
-def checkDrawn(x):
-    return (not any(y['statusRent'] == 2 and y['statusDraw'] == 0 for y in x)) and x != []
