@@ -44,7 +44,6 @@ def getCrawlResult(time):
     requestDateS =  datetime(requestTime.year,requestTime.month,1,tzinfo=timezone(timedelta(hours=8))).timestamp() ## epoch time
     requestDateE =  datetime(requestTime.year,requestTime.month,calendar.monthrange(requestTime.year, requestTime.month)[1],tzinfo=timezone(timedelta(hours=8))).timestamp() ## epoch time
     res = []
-    isDrawn = True
 
     ## crawler
     for court in requestvenueId:
@@ -71,8 +70,6 @@ def getCrawlResult(time):
                 "venueName": venuesSNToName[key["VenuesSN"]],
                 "rentTimePeriod": rentTimePeriod
             })
-
-    if not isDrawn: return "還沒抽呢：）"
 
     ## post process
     for i in res:
