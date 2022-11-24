@@ -112,8 +112,8 @@ def threadIndex(q, key):
     data = r.json()
     soup = BeautifulSoup(data['ScheduleList'], "html.parser")
 
-    result = soup.find_all(
-        "div", {"title": re.compile(r'(資訊工程學系|資訊工程學研究所|資訊網路與多媒體研究所)')})
+    matchPattern = "(" + "|".join(requestyearUserUnitName) + ")"
+    result = soup.find_all("div", {"title": re.compile(matchPattern)})
     res = []
     for i in result:
         duration = int(re.findall('[0-9]+', result[0].parent.get_attribute_list('style')[0])[1])
