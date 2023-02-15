@@ -1,4 +1,4 @@
-django==4.1.6
+django==4.1.7
 beautifulsoup4
 requests
 uwsgi
